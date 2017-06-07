@@ -1,0 +1,31 @@
+#cont {
+     width: 1005px;
+     margin: 0 auto;
+}
+#customers, #order {
+    height: 500px;
+    border: 1px solid white;
+    float: left;
+    min-height: 450px;
+    color: white;
+}
+#customers {
+     width: 250px;
+     background-color: #111;
+}
+#order {
+     width: 750px;
+     background-color: #777;
+}
+p, h2 {
+    padding: 10px;
+}
+
+.order {
+    margin-left: 5px;
+    padding: 4px 12px;
+    border-radius: 10px;
+}
+h1 {
+    text-align: center;
+}

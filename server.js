@@ -15,8 +15,8 @@ var config= {
 
 var pool = new pg.Pool(config);
 
-app.listen(3000, function() {
-    console.log('server up on port', 3000);
+app.listen(5439, function() {
+    console.log('server up on port', 5439);
 });
 
 app.get("/", function(req, res) {
@@ -42,7 +42,9 @@ app.get('/customers', function(req, res) {
         });
 });
 
-app.post('/orders', function(req, res) {
+app.get('/:id', function(req, res) {
+    var id = req.params.id;
+
     pool.connect()
         .then(function (client) {
             var resultSet = client.query("SELECT customers.id, street, city, state, zip, address_type, orders.id, description, quantity, line_items.unit_price,"+
@@ -51,7 +53,7 @@ app.post('/orders', function(req, res) {
               "JOIN orders ON orders.address_id = addresses.id " +
               "JOIN line_items ON line_items.order_id = orders.id " +
               "JOIN products ON line_items.product_id = products.id " +
-              "WHERE customers.id = $1;", [req.body.id])
+              "WHERE customers.id = $1;", [id])
                 .then(function(resultSet) {
                     client.release();
                     res.send(resultSet.rows);
