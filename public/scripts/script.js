@@ -12,12 +12,17 @@ function onReady() {
          success: function(res) {
              console.log('back from the server with', res);
              var customers = [];
-
              for (var i = 0; i < res.length; i++) {
                  customers.push(res[i].first_name + ' ' + res[i].last_name);
              }
              for (var j = 0; j < customers.length; j++) {
-                 $("#customers").append("<p>" +customers[j] + "<button class = 'order'  data-id='" + res[j].id + "'>Order</button>"  + "<p>");
+                 if (res[j].count != 0) {
+                      $("#customers").append("<p>" +customers[j] + "<button class = 'order'  data-id='" + res[j].id + "'>Order</button>"  + "<p>");
+                 }
+                 else {
+                     $("#customers").append("<p>" +customers[j] + "<p>");
+                 }
+
              }
          }
 

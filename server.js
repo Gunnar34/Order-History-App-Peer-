@@ -25,14 +25,15 @@ app.get("/", function(req, res) {
 });
 
 app.get('/customers', function(req, res) {
-    console.log('');
     pool.connect()
         .then(function (client) {
-            console.log('client,', client);
-            client.query("SELECT * FROM customers")
-
+            var customers = client.query("SELECT  first_name, last_name, customers.id, COUNT(orders.id) FROM customers "+
+              "LEFT JOIN addresses ON customers.id = addresses.customer_id " +
+              "LEFT JOIN orders ON orders.address_id = addresses.id " +
+              "GROUP BY customers.id")
                 .then(function(customers) {
                     client.release();
+                    console.log('success');
                     res.send(customers.rows);
             });
         })
@@ -47,8 +48,8 @@ app.get('/:id', function(req, res) {
 
     pool.connect()
         .then(function (client) {
-            var resultSet = client.query("SELECT customers.id, street, city, state, zip, address_type, orders.id, description, quantity, line_items.unit_price,"+
-             " (quantity * line_items.unit_price) AS total FROM customers " +
+            var resultSet = client.query("SELECT customers.id, street, city, state, zip, address_type, orders.id, description, quantity, line_items.unit_price, "+
+             "(quantity * line_items.unit_price) AS total FROM customers " +
               "JOIN addresses ON customers.id = addresses.customer_id " +
               "JOIN orders ON orders.address_id = addresses.id " +
               "JOIN line_items ON line_items.order_id = orders.id " +
